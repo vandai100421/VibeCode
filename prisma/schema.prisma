@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client"
   output   = "../src/infrastructure/prisma/generated"
@@ -8,4 +5,108 @@ generator client {
 
 datasource db {
   provider = "sqlite"
+}
+
+enum LoaiNhuCau {
+  CO_DINH
+  DOT_XUAT
+}
+
+enum LoaiAnhChup {
+  QUANG_HOC
+  HONG_NGOAI
+  SAR
+  DA_PHO
+  SIEU_PHO
+  NHIET
+  VIDEO
+}
+
+enum TrangThaiNhuCau {
+  CHO_DUYET
+  DA_DUYET
+  DA_PHAN_CONG
+  DANG_CHUP
+  DA_CHUP
+  DA_TRA_ANH
+  TU_CHOI
+  DA_HUY
+}
+
+enum TinhTrangNguon {
+  HOAT_DONG
+  BAO_TRI
+  NGUNG_HOAT_DONG
+}
+
+model MucTieu {
+  id      Int           @id @default(autoincrement())
+  ten     String        @unique
+  nhuCau  NhuCauAnh[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("muc_tieu")
+}
+
+model Nguon {
+  id             Int              @id @default(autoincrement())
+  nguon          String
+  tenNguon       String           @unique
+  thoiGianSuDung String
+  tinhTrang      TinhTrangNguon   @default(HOAT_DONG)
+  danhGia        String?
+  nhuCau         NhuCauAnh[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("nguon")
+}
+
+model NhuCauAnh {
+  id                  Int              @id @default(autoincrement())
+  mucTieuId           Int
+  nguonId             Int
+  loaiNhuCau          LoaiNhuCau
+  diaBan              String
+  loaiAnhChup         LoaiAnhChup
+  toaDoX              Float
+  toaDoY              Float
+  thoiGianDat         DateTime         @default(now())
+  thoiGianChup        DateTime?
+  thoiGianMongMuonTu  DateTime?
+  thoiGianMongMuonDen DateTime?
+  thoiGianTra         DateTime?
+  doPhanGiai          String
+  trangThai           TrangThaiNhuCau @default(CHO_DUYET)
+  moTa                String?
+
+  mucTieu MucTieu @relation(fields: [mucTieuId], references: [id])
+  nguon   Nguon   @relation(fields: [nguonId], references: [id])
+  lichSu  NhuCauAnhLichSu[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([trangThai])
+  @@index([nguonId])
+  @@index([mucTieuId])
+  @@index([loaiNhuCau])
+  @@map("nhu_cau_anh")
+}
+
+model NhuCauAnhLichSu {
+  id           Int              @id @default(autoincrement())
+  nhuCauId     Int
+  trangThaiCu  TrangThaiNhuCau?
+  trangThaiMoi TrangThaiNhuCau
+  thoiGian     DateTime         @default(now())
+  ghiChu       String?
+
+  nhuCau NhuCauAnh @relation(fields: [nhuCauId], references: [id], onDelete: Cascade)
+
+  @@index([nhuCauId])
+  @@map("nhu_cau_anh_lich_su")
 }

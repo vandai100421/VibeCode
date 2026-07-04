@@ -55,16 +55,31 @@ src/
 
 ## Data model
 
-Đầy đủ ở `PROJECT.md`. Tóm tắt:
+Đầy đủ ở `PROJECT.md` + `prisma/schema.prisma`. Đã migrate (migration `20260704072534_init`).
 
-- `MucTieu` (id, ten unique)
-- `Nguon` (id, nguon, tenNguon unique, thoiGianSuDung string, tinhTrang enum, danhGia string?)
-- `NhuCauAnh` (id, mucTieuId FK, nguonId FK, loaiNhuCau enum, diaBan, loaiAnhChup enum, toaDoX/Y float, thoiGianDat auto, thoiGianChup?, thoiGianMongMuonTu/Den?, thoiGianTra?, doPhanGiai, trangThai enum, moTa?)
-- `NhuCauAnhLichSu` (id, nhuCauId FK, trangThaiCu enum?, trangThaiMoi enum, thoiGian, ghiChu?)
+- `MucTieu` (id, ten unique, createdAt, updatedAt) → `@@map("muc_tieu")`
+- `Nguon` (id, nguon, tenNguon unique, thoiGianSuDung string, tinhTrang enum, danhGia string?, createdAt, updatedAt) → `@@map("nguon")`
+- `NhuCauAnh` (id, mucTieuId FK, nguonId FK, loaiNhuCau enum, diaBan, loaiAnhChup enum, toaDoX/Y float, thoiGianDat auto, thoiGianChup?, thoiGianMongMuonTu/Den?, thoiGianTra?, doPhanGiai, trangThai enum, moTa?, createdAt, updatedAt; index trên trangThai/nguonId/mucTieuId/loaiNhuCau) → `@@map("nhu_cau_anh")`
+- `NhuCauAnhLichSu` (id, nhuCauId FK cascade delete, trangThaiCu enum?, trangThaiMoi enum, thoiGian, ghiChu?, index nhuCauId) → `@@map("nhu_cau_anh_lich_su")`
 
-Enum: `LoaiNhuCau`, `LoaiAnhChup`, `TrangThaiNhuCau`, `TinhTrangNguon`.
+Enum: `LoaiNhuCau` (CO_DINH, DOT_XUAT), `LoaiAnhChup` (7 giá trị), `TrangThaiNhuCau` (8 giá trị), `TinhTrangNguon` (3 giá trị). SQLite lưu enum dạng TEXT, validate ở Prisma client.
 
-> Schema Prisma chi tiết sẽ định nghĩa ở S1 trong `prisma/schema.prisma`.
+## Routes (hiện tại sau S1)
+
+| Method | Path                 | Chức năng                                    |
+| ------ | -------------------- | -------------------------------------------- |
+| GET    | `/api/muc-tieu`      | list tất cả mục tiêu                         |
+| POST   | `/api/muc-tieu`      | tạo mục tiêu                                 |
+| GET    | `/api/muc-tieu/[id]` | xem 1 mục tiêu                               |
+| PUT    | `/api/muc-tieu/[id]` | sửa mục tiêu                                 |
+| DELETE | `/api/muc-tieu/[id]` | xóa mục tiêu (block nếu có nhu cầu liên kết) |
+| GET    | `/api/nguon`         | list tất cả nguồn                            |
+| POST   | `/api/nguon`         | tạo nguồn                                    |
+| GET    | `/api/nguon/[id]`    | xem 1 nguồn                                  |
+| PUT    | `/api/nguon/[id]`    | sửa nguồn                                    |
+| DELETE | `/api/nguon/[id]`    | xóa nguồn (block nếu có nhu cầu liên kết)    |
+
+UI pages: `/tong-quan` (dashboard), `/muc-tieu` (list+form dialog), `/nguon` (list+form dialog). Route `/` redirect → `/tong-quan`.
 
 ## Nguyên tắc kiến trúc
 

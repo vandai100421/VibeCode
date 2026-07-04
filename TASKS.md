@@ -31,16 +31,16 @@ Trạng thái: **xong**
 
 ## S1 — Master data
 
-Trạng thái: **chưa bắt đầu**
+Trạng thái: **xong**
 
-- [ ] Định nghĩa Prisma schema đầy đủ (4 model + 4 enum) — (high) — sprint: S1
-- [ ] Migration đầu tiên + seed data mẫu — (high) — sprint: S1
-- [ ] Module `muc-tieu`: Zod schema + service + route handlers (CRUD) — (high) — sprint: S1
-- [ ] Module `nguon`: Zod schema + service + route handlers (CRUD) — (high) — sprint: S1
-- [ ] UI MucTieu: list + form tạo/sửa + xóa — (high) — sprint: S1
-- [ ] UI Nguon: list + form tạo/sửa + xóa — (high) — sprint: S1
-- [ ] Setup TanStack Query provider + hooks cơ bản — (med) — sprint: S1
-- [ ] Layout dashboard (sidebar/nav) — (med) — sprint: S1
+- [x] Định nghĩa Prisma schema đầy đủ (4 model + 4 enum) — (high) — sprint: S1
+- [x] Migration đầu tiên + seed data mẫu — (high) — sprint: S1
+- [x] Module `muc-tieu`: Zod schema + service + route handlers (CRUD) — (high) — sprint: S1
+- [x] Module `nguon`: Zod schema + service + route handlers (CRUD) — (high) — sprint: S1
+- [x] UI MucTieu: list + form tạo/sửa + xóa — (high) — sprint: S1
+- [x] UI Nguon: list + form tạo/sửa + xóa — (high) — sprint: S1
+- [x] Setup TanStack Query provider + hooks cơ bản — (med) — sprint: S1
+- [x] Layout dashboard (sidebar/nav) — (med) — sprint: S1
 
 ## S2 — Nhu cầu ảnh (core)
 
